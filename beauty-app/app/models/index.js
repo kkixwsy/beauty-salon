@@ -18,18 +18,10 @@ db.master = require("./master.model.js")(sequelize, Sequelize);
 db.client = require("./client.model.js")(sequelize, Sequelize);
 db.appointment = require("./appointment.model.js")(sequelize, Sequelize);
 db.appointmentService = require("./appointment-service.model.js")(sequelize, Sequelize);
-
-// Связи
-db.serviceCategory.hasMany(db.service, { foreignKey: "serviceCategoryId" });
-db.service.belongsTo(db.serviceCategory, { foreignKey: "serviceCategoryId" });
-
-db.master.hasMany(db.appointment, { foreignKey: "masterId" });
-db.appointment.belongsTo(db.master, { foreignKey: "masterId" });
-
-db.client.hasMany(db.appointment, { foreignKey: "clientId" });
-db.appointment.belongsTo(db.client, { foreignKey: "clientId" });
-
-db.appointment.belongsToMany(db.service, { through: db.appointmentService, foreignKey: "appointmentId" });
-db.service.belongsToMany(db.appointment, { through: db.appointmentService, foreignKey: "serviceId" });
+db.goods = require("./goods.model.js")(sequelize, Sequelize);
+db.pricelist = require("./pricelist.model.js")(sequelize, Sequelize);
+db.pricelistGoods = require("./pricelistgoods.model.js")(sequelize, Sequelize);
+db.purchase = require("./purchase.model.js")(sequelize, Sequelize);
+require("./references.model.js")(db);
 
 module.exports = db;
