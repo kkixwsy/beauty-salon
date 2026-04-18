@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  postgresdb:
+    image: postgres:15-alpine
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=beauty_user
+      - POSTGRES_PASSWORD=beauty123
+      - POSTGRES_DB=beauty_salon_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - db:/var/lib/postgresql/data
+
+  app:
+    depends_on:
+      - postgresdb
+    build: ./beauty-app
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      - DB_HOST=postgresdb
+      - DB_USER=beauty_user
+      - DB_PASSWORD=beauty123
+      - DB_NAME=beauty_salon_db
+      - DB_PORT=5432
+      - NODE_DOCKER_PORT=8080
+    stdin_open: true
+    tty: true
+
+volumes:
+  db:
