@@ -4,12 +4,13 @@ services:
   postgresdb:
     image: postgres:15-alpine
     restart: unless-stopped
+    env_file: .env
     environment:
-      - POSTGRES_USER=beauty_user
-      - POSTGRES_PASSWORD=beauty123
-      - POSTGRES_DB=beauty_salon_db
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
     ports:
-      - "5432:5432"
+      - "${POSTGRES_LOCAL_PORT}:${POSTGRES_DOCKER_PORT}"
     volumes:
       - db:/var/lib/postgresql/data
 
@@ -18,15 +19,16 @@ services:
       - postgresdb
     build: ./beauty-app
     restart: unless-stopped
+    env_file: .env
     ports:
-      - "8080:8080"
+      - "${NODE_LOCAL_PORT}:${NODE_DOCKER_PORT}"
     environment:
       - DB_HOST=postgresdb
-      - DB_USER=beauty_user
-      - DB_PASSWORD=beauty123
-      - DB_NAME=beauty_salon_db
-      - DB_PORT=5432
-      - NODE_DOCKER_PORT=8080
+      - DB_USER=${POSTGRES_USER}
+      - DB_PASSWORD=${POSTGRES_PASSWORD}
+      - DB_NAME=${POSTGRES_DB}
+      - DB_PORT=${POSTGRES_DOCKER_PORT}
+      - NODE_DOCKER_PORT=${NODE_DOCKER_PORT}
     stdin_open: true
     tty: true
 
