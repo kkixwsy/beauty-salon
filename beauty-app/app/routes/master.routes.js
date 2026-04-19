@@ -1,5 +1,5 @@
 ﻿module.exports = app => {
-  const controller = require("../controllers/service-category.controller.js");
+  const controller = require("../controllers/master.controller.js");
   const router = require("express").Router();
 
   router.post("/", controller.create);
@@ -9,5 +9,5 @@
   router.delete("/:id", controller.delete);
   router.delete("/", controller.deleteAll);
 
-  app.use("/api/service-categories", router);
+  app.use("/api/masters", router);
 };

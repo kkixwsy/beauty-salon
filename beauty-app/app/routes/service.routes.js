@@ -1,27 +1,13 @@
-module.exports = app => {
-  const services = require("../controllers/service.controller.js");
+﻿module.exports = app => {
+  const controller = require("../controllers/service.controller.js");
   const router = require("express").Router();
 
-  // Создать новую услугу
-  router.post("/", services.create);
-
-  // Получить все услуги
-  router.get("/", services.findAll);
-
-  // Получить все активные услуги
-  router.get("/active", services.findAllActive);
-
-  // Получить одну услугу по id
-  router.get("/:id", services.findOne);
-
-  // Обновить услугу
-  router.put("/:id", services.update);
-
-  // Удалить услугу
-  router.delete("/:id", services.delete);
-
-  // Удалить все услуги
-  router.delete("/", services.deleteAll);
+  router.post("/", controller.create);
+  router.get("/", controller.findAll);
+  router.get("/:id", controller.findOne);
+  router.put("/:id", controller.update);
+  router.delete("/:id", controller.delete);
+  router.delete("/", controller.deleteAll);
 
   app.use("/api/services", router);
 };
