@@ -59,3 +59,23 @@ exports.deleteAll = (req, res) => {
     .then(nums => res.send({ message: `${nums} Appointments were deleted successfully!` }))
     .catch(err => res.status(500).send({ message: err.message || "Some error occurred while removing all appointments." }));
 };
+// Записи на сегодня
+exports.getTodayAppointments = async (req, res) => {
+  try {
+    const query = `
+      SELECT a.id, a."dateTime", a.status, 
+             c.name as client_name, m.name as master_name
+      FROM appointments a
+      JOIN clients c ON a."clientId" = c.id
+      JOIN masters m ON a."masterId" = m.id
+      WHERE DATE(a."dateTime") = CURRENT_DATE
+      ORDER BY a."dateTime" ASC
+    `;
+    const result = await db.sequelize.query(query, { 
+      type: db.Sequelize.QueryTypes.SELECT 
+    });
+    res.send(result);
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
+};

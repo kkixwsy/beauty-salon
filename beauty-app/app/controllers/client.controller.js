@@ -59,3 +59,21 @@ exports.deleteAll = (req, res) => {
     .then(nums => res.send({ message: `${nums} Clients were deleted successfully!` }))
     .catch(err => res.status(500).send({ message: err.message || "Some error occurred while removing all clients." }));
 };
+
+// Клиенты с бонусами более 100
+exports.getLoyalClients = async (req, res) => {
+  try {
+    const query = `
+      SELECT id, name, phone, email, "loyaltyPoints"
+      FROM clients
+      WHERE "loyaltyPoints" > 100 AND "isActive" = true
+      ORDER BY "loyaltyPoints" DESC
+    `;
+    const result = await db.sequelize.query(query, { 
+      type: db.Sequelize.QueryTypes.SELECT 
+    });
+    res.send(result);
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
+};

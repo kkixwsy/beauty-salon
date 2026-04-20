@@ -59,3 +59,21 @@ exports.deleteAll = (req, res) => {
     .then(nums => res.send({ message: `${nums} Services were deleted successfully!` }))
     .catch(err => res.status(500).send({ message: err.message || "Some error occurred while removing all services." }));
 };
+
+// Топ-5 популярных услуг (упрощённая версия)
+exports.getPopularServices = async (req, res) => {
+  try {
+    const query = `
+      SELECT id, name, price, 0 as booking_count
+      FROM services
+      ORDER BY id
+      LIMIT 5
+    `;
+    const result = await db.sequelize.query(query, { 
+      type: db.Sequelize.QueryTypes.SELECT 
+    });
+    res.send(result);
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
+};

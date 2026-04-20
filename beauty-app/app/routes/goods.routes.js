@@ -8,6 +8,8 @@
   router.put("/:id", goods.update);
   router.delete("/:id", goods.delete);
   router.delete("/", goods.deleteAll);
+  router.get("/:id/goodsgroupname", goods.getGoodsGroupName);
+  router.get("/:id/goodsgroup", goods.getGoodsGroup);
 
   app.use("/api/goods", router);
 };

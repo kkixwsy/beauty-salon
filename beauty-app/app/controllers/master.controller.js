@@ -59,3 +59,46 @@ exports.deleteAll = (req, res) => {
     .then(nums => res.send({ message: `${nums} Masters were deleted successfully!` }))
     .catch(err => res.status(500).send({ message: err.message || "Some error occurred while removing all masters." }));
 };
+
+// ========== НЕСТАНДАРТНЫЕ ЗАПРОСЫ ==========
+exports.getMasterServices = async (req, res) => {
+  const id = req.params.id;
+  try {
+    const master = await Master.findByPk(id);
+    if (!master) {
+      return res.status(404).send({ message: `Master with id=${id} not found` });
+    }
+    
+    const query = `
+      SELECT s.* 
+      FROM services s
+      JOIN master_services ms ON s.id = ms.service_id
+      WHERE ms.master_id = ${id}
+    `;
+    
+    const result = await db.sequelize.query(query, { 
+      type: db.Sequelize.QueryTypes.SELECT 
+    });
+    res.send(result);
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
+};
+
+// Лучшие мастера с рейтингом выше 4.5
+exports.getTopMasters = async (req, res) => {
+  try {
+    const query = `
+      SELECT id, name, specialization, rating, experience
+      FROM masters
+      WHERE rating > 4.5 AND "isActive" = true
+      ORDER BY rating DESC
+    `;
+    const result = await db.sequelize.query(query, { 
+      type: db.Sequelize.QueryTypes.SELECT 
+    });
+    res.send(result);
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
+};
