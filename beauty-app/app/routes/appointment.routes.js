@@ -4,6 +4,7 @@
 
   router.post("/", appointment.create);
   router.get("/", appointment.findAll);
+  router.get("/today/count", appointment.getTodayCount);
   router.get("/:id", appointment.findOne);
   router.put("/:id", appointment.update);
   router.delete("/:id", appointment.delete);

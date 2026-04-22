@@ -24,6 +24,7 @@ require("./app/routes/service.routes")(app);
 require("./app/routes/master.routes")(app);
 require("./app/routes/client.routes")(app);
 require("./app/routes/appointment.routes")(app);
+require("./app/routes/revenue.routes")(app);
 
 const PORT = process.env.NODE_DOCKER_PORT || 8080;
 app.listen(PORT, () => {

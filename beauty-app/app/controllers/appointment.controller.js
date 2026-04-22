@@ -79,3 +79,15 @@ exports.getTodayAppointments = async (req, res) => {
     res.status(500).send({ message: err.message });
   }
 };
+// Количество записей на сегодня
+exports.getTodayCount = async (req, res) => {
+  try {
+    const query = `SELECT COUNT(*) as count FROM appointments WHERE DATE("dateTime") = CURRENT_DATE`;
+    const result = await db.sequelize.query(query, { 
+      type: db.Sequelize.QueryTypes.SELECT 
+    });
+    res.send(result[0]);
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
+};
